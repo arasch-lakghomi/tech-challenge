@@ -1,0 +1,16 @@
+{
+  "name": "ws-server",
+  "version": "1.0.0",
+  "description": "WebSocket Server for tech challenge",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Arasch Lakghomi",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  }
+}
