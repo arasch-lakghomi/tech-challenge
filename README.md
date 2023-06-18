@@ -11,7 +11,7 @@ General considerations:
 - all code will live in monorepo
 - FE and BE will be split into seperate services to allow better scalability
 - for local development, docker-compose file will be created and use volume binding to provision node_modules. respective npm scripts will be created.
-- ideally, Cyprus will be used for local E2E testing, if enough time is available, test will be created at the end of implementation.
+- ideally, Cypress will be used for local E2E testing, if enough time is available, test will be created at the end of implementation.
   however, test scenario definition will be created first to simulate TTD
 - ws-server:
   - 
