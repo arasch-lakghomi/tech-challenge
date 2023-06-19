@@ -1,7 +1,8 @@
 import { Component, OnDestroy } from '@angular/core';
-import { ServerMessage, WebsocketService } from './shared/services/websocket.service';
+import { WebsocketService } from './shared/services/websocket.service';
 import { generate } from "random-words";
 import { Subject, takeUntil } from 'rxjs';
+import { Message } from './shared/types/message.type';
 
 @Component({
   selector: 'app-root',
@@ -11,7 +12,10 @@ import { Subject, takeUntil } from 'rxjs';
 export class AppComponent implements OnDestroy {
   private readonly destroy$: Subject<void> = new Subject();
   requestMessages: string[] = [];
-  responseMessages: ServerMessage[] = [];
+  responses: {id: number, message: string}[] = [];
+  mappings: string[] = [];
+  sendButtonClicked: boolean = false;
+  mapButtonClicked: boolean = false;
  
   constructor(private ws: WebsocketService) {
     this.connectToServer();
@@ -22,11 +26,17 @@ export class AppComponent implements OnDestroy {
   private listenToServerEvents() {
     this.ws.messages$
       .pipe(takeUntil(this.destroy$))
-      .subscribe(msg => {
-        this.responseMessages.push(msg);
-      });
+      .subscribe(msg => this.handleServerMessage(msg));
   }
   
+  private handleServerMessage(msg: Message) {
+    if (msg.event === 'sendResponse') {
+      this.responses.push({id: msg.payload.id!, message: msg.payload.response!});
+    }
+    if (msg.event === 'sendMap') {
+      this.mappings.push(`Map: ${msg.payload.request!}  => ${msg.payload.response!}`);
+    }
+  }
 
   private generateRandomRequestMessages() {
     this.requestMessages = generate(10);
@@ -39,6 +49,12 @@ export class AppComponent implements OnDestroy {
   onSendRequests() {
     this.requestMessages.forEach(message => {
       this.ws.sendMessage(message);
+    });
+  }
+
+  onGetMapping() {
+    this.responses.forEach(response => {
+      this.ws.getMessagesById(response.id);
     });
   }
 
