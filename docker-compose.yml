@@ -2,14 +2,16 @@ version: '3'
 
 services:
 
+  ws-server:
+    build: 
+      dockerfile: Dockerfile
+      context: ./ws-server
+    ports:
+      - 3000:3000
+
   ui-client:
     build: 
       dockerfile: Dockerfile
       context: ./ui-client
     ports:
       - 80:80
-
-  ws-server:
-    build: 
-      dockerfile: Dockerfile
-      context: ./ws-server
