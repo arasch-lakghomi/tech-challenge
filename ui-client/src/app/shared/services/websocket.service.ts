@@ -17,8 +17,15 @@ export class WebsocketService {
   connect() { 
     this.socket$.subscribe({
       next: msg => console.log('message received: ' + msg),
-      error: err => console.log(err),
+      error: err => this.handleError(err),
       complete: () => console.log('complete')
     });
   }
+
+  handleError(err: any): void {
+    // handle error
+  }
 }
+  
+
+

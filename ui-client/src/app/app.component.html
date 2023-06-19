@@ -1,1 +1,22 @@
 <h1>This will be the UI</h1>
+
+<div class="frame">
+    <div class="requests">
+        <p *ngFor="let requestMessage of requestMessages; let i = index">
+            {{ i+1 + ': ' + requestMessage }}
+        </p>
+    </div>
+
+    <button>Send requests</button>
+
+    <div class="responses">
+        <div class="messages"></div>
+        <div class="ids"></div>
+    </div>
+
+    <button>Map responses to requests</button>
+
+    <div class="map">
+
+    </div>
+</div>
