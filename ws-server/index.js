@@ -3,7 +3,6 @@ const wss = new WebSocketServer.Server({ port: 3000 })
 
 wss.on("connection", ws => {
     console.log('Client connected');
-    ws.send(JSON.stringify({ message: 'Welcome, you are connected!' }));
 
     ws.on("message", message => {
         console.log(`Received message: ${message}`);

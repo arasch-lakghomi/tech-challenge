@@ -10,11 +10,15 @@
     <button (click)="onSendRequests()">Send requests</button>
 
     <div class="responses">
-        <div class="messages"></div>
+        <div class="messages">
+            <p *ngFor="let responseMessage of responseMessages">
+                {{ responseMessage }}
+            </p>
+        </div>
         <div class="ids"></div>
     </div>
 
-    <button>Map responses to requests</button>
+    <button [disabled]="responseMessages.length < 10">Map responses to requests</button>
 
     <div class="map">
 

@@ -11,7 +11,8 @@ import { Subject, takeUntil } from 'rxjs';
 export class AppComponent implements OnDestroy {
   private readonly destroy$: Subject<void> = new Subject();
   requestMessages: string[] = [];
-
+  responseMessages: string[] = [];
+ 
   constructor(private ws: WebsocketService) {
     this.connectToServer();
     this.listenToServerEvents();
@@ -21,7 +22,9 @@ export class AppComponent implements OnDestroy {
   private listenToServerEvents() {
     this.ws.messages$
       .pipe(takeUntil(this.destroy$))
-      .subscribe(msg => console.log(msg.message));
+      .subscribe(msg => {
+        this.responseMessages.push(msg.message);
+      });
   }
   
 

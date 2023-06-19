@@ -15,3 +15,5 @@ services:
       context: ./ui-client
     ports:
       - 80:80
+    depends_on:
+      - ws-server
