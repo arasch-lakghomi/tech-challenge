@@ -2,12 +2,12 @@
 
 <div class="frame">
     <div class="requests">
-        <p *ngFor="let requestMessage of requestMessages; let i = index">
-            {{ i+1 + ': ' + requestMessage }}
+        <p *ngFor="let requestMessage of requestMessages">
+            {{ requestMessage }}
         </p>
     </div>
 
-    <button>Send requests</button>
+    <button (click)="onSendRequests()">Send requests</button>
 
     <div class="responses">
         <div class="messages"></div>

@@ -1,20 +1,29 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { WebsocketService } from './shared/services/websocket.service';
 import { generate } from "random-words";
-import { Subject } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnDestroy {
+  private readonly destroy$: Subject<void> = new Subject();
   requestMessages: string[] = [];
 
   constructor(private ws: WebsocketService) {
     this.connectToServer();
+    this.listenToServerEvents();
     this.generateRandomRequestMessages();
   }
+
+  private listenToServerEvents() {
+    this.ws.messages$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(msg => console.log(msg.message));
+  }
+  
 
   private generateRandomRequestMessages() {
     this.requestMessages = generate(10);
@@ -25,7 +34,13 @@ export class AppComponent {
   }
 
   onSendRequests() {
-    // send messages to ws
+    this.requestMessages.forEach(message => {
+      this.ws.sendMessage(message);
+    });
   }
 
+  ngOnDestroy(): void {
+    this.destroy$.complete();
+    this.ws.close();
+  }
 }
