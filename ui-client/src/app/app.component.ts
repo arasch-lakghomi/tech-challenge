@@ -1,5 +1,5 @@
 import { Component, OnDestroy } from '@angular/core';
-import { WebsocketService } from './shared/services/websocket.service';
+import { ServerMessage, WebsocketService } from './shared/services/websocket.service';
 import { generate } from "random-words";
 import { Subject, takeUntil } from 'rxjs';
 
@@ -11,7 +11,7 @@ import { Subject, takeUntil } from 'rxjs';
 export class AppComponent implements OnDestroy {
   private readonly destroy$: Subject<void> = new Subject();
   requestMessages: string[] = [];
-  responseMessages: string[] = [];
+  responseMessages: ServerMessage[] = [];
  
   constructor(private ws: WebsocketService) {
     this.connectToServer();
@@ -23,7 +23,7 @@ export class AppComponent implements OnDestroy {
     this.ws.messages$
       .pipe(takeUntil(this.destroy$))
       .subscribe(msg => {
-        this.responseMessages.push(msg.message);
+        this.responseMessages.push(msg);
       });
   }
   

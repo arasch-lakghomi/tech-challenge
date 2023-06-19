@@ -9,13 +9,13 @@
 
     <button (click)="onSendRequests()">Send requests</button>
 
-    <div class="responses">
-        <div class="messages">
-            <p *ngFor="let responseMessage of responseMessages">
-                {{ responseMessage }}
-            </p>
+    <div>
+        <div 
+            class="response"
+            *ngFor="let responseMessage of responseMessages">
+                <p  class="messages">{{ responseMessage.message }}</p>
+                <p  class="ids">{{ responseMessage.id }}</p>
         </div>
-        <div class="ids"></div>
     </div>
 
     <button [disabled]="responseMessages.length < 10">Map responses to requests</button>
