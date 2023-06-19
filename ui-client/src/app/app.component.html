@@ -1,26 +1,42 @@
-<h1>This will be the UI</h1>
+<h1>WebSocket Request-Response Mapping Demo</h1>
+
+<p class="explanation">
+    Here you will find the explanation for the demo.
+</p>
 
 <div class="frame">
-    <div class="requests">
+    <div>
+        <p class="column-title">List of requests to the server</p>
         <p *ngFor="let requestMessage of requestMessages">
             {{ requestMessage }}
         </p>
     </div>
 
-    <button (click)="onSendRequests()">Send requests</button>
+    <button 
+        [disabled]="sendButtonClicked"
+        (click)="onSendRequests(); sendButtonClicked = true;">
+            Send requests
+    </button>
 
     <div>
-        <div 
-            class="response"
-            *ngFor="let responseMessage of responseMessages">
-                <p  class="messages">{{ responseMessage.message }}</p>
-                <p  class="ids">{{ responseMessage.id }}</p>
-        </div>
+        <p class="column-title">List of responses from the server</p>
+        <p  
+            *ngFor="let response of responses">
+                {{ response.message }}
+        </p>
     </div>
 
-    <button [disabled]="responseMessages.length < 10">Map responses to requests</button>
+    <button 
+        (click)="onGetMapping(); mapButtonClicked = true;"
+        [disabled]="responses.length < 10 || mapButtonClicked">
+            Map responses to requests
+    </button>
 
-    <div class="map">
 
+    <div>
+        <p class="column-title">Mapping between client request & server response</p>
+        <p *ngFor="let map of mappings">
+            {{ map }}
+        </p>
     </div>
 </div>
