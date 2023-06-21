@@ -1,64 +1,33 @@
-################### Challenge-Thought-Process WIP ######################
+# Mapped Request-Response Websocket Server
 
-Challenge:
-## Async WebSocket RPCs
-WebSockets are great for bidirectional client-server communication, but they lack request-response mapping.
-+ create a module that provides request-response mapping on top of WebSockts. Use ws server side
-+ create a UI that lets the user experience what you have done
+## Overview
+This implementation offers a solution to the following tech problem:
+>WebSockets are great for bidirectional client-server communication, but they lack request-response mapping.
+>-+ create a module that provides request-response mapping on top of WebSockts. Use ws server side
+>-+ create a UI that lets the user experience what you have done
 
-General considerations:
-- development on main branch as single-person project
-- all code will live in monorepo
-- FE and BE will be split into seperate services to allow better scalability
-- for local development, docker-compose file will be created and use volume binding to provision node_modules. respective npm scripts will be created.
-- ideally, Cypress will be used for local E2E testing, if enough time is available, test will be created at the end of implementation.
-  however, test scenario definition will be created first to simulate TTD
+This package consists of a frontend and backend application. The backend application is a WebSocket server that provides a simple in-memory database for all request messages and maps them to responses using unique IDs. The frontend application is a demo UI that sends randomly generated messages to the server and displays the corresponding randomly generated responses. 
+It also allows querying the server for the original request message based on the response.
 
+## Features Implemented
+- Frontend UI and Backend Server
+- Extension of the standard WebSocket server to include the required functionality as a standalone class that can be imported into the application
+- Frontend and Backend implemented as separate services, ensuring potential scalability in the future
+- Docker Compose file for simplified local hosting
 
-App idea:
-Snackbar for waiting/connection/failure.
-Snackbar app explanation.
-UI will generate 10 random messages.
-On user interaction (button) client sends a request for each request to server.
-Server will generate specific response (Antwort auf: request1) and id for each request and persist (internally)+ Server will respond to each request within random time between 1-10 seconds (to simulate problem of request-response mapping due to asynchronosity) with this random message & id.
-UI will display each response & id in the order it receives them, leading to a different order of responses than the order of requests.
-Afterwards on user interaction, it will display the corresponding request for each row
+## Out of Scope
+- Testing: Initially, an end-to-end (E2E) test with Cypress was planned. However, due to the time required for proper implementation and the relatively weak relevance of the test's validity for this particular application, the E2E test was outscoped.
 
-- ui-client:
+## Setup Instructions
+### Prerequisites
+Make sure you have the following prerequisites installed:
+- Docker (version 20.10.0 or higher)
+- Docker Compose (version 2.3.4 or higher)
 
-Request										      Response										Original reguest				
-																								
+### Start the Application
+From the terminal, cd into the project root folder and run the following command:
+```console
+docker-compose up
+```
 
-request1										response1			id1							      request3				
-																								
-request2										response2			id2							      request7				
-																								
-request3										response3			id3							      request4				
-																								
-request4										response4			id4							      request8				
-						Send requests										    Map to requests								
-request5										response5			id5							      request6				
-																								
-request6										response6			id6							      request1				
-																								
-request7										response7			id7							      request10				
-																								
-request8										response8			id8							      request9				
-																								
-request9										response9			id9							      request2				
-																								
-request10										response10		id10							      request5				
-
-- Map to requests button will only be active  if Response table full
-																								
-																								
-- ws-server:
-  - two events:
-    - onMessage(message)
-    - onGetRequestById(id): requestType
-  - local 'database': Map between generated id to (request: '', response: '')
-
-E2E Test:
-- click on send requests
-- as soon as map to requests button active: click
-- check: portion of request-string in response is identical to the same row entry in original request
+The UI will then be accessible through a web browser on http://localhost.
