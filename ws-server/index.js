@@ -1,57 +1,45 @@
 const randomWords = require('random-words');
-const WebSocketServer = require('ws');
-const wss = new WebSocketServer.Server({ port: 3000 })
+const CustomWebSocketServer = require('./custom-websocket-server');
 
-let messageId = 0;
-let messageDatabase = new Map();
+const wss = new CustomWebSocketServer({ port: 3000 });
 
 wss.on("connection", ws => {
     console.log('Client connected');
     
     ws.on("message", message => handleRequest(ws, message));
-    ws.on("close", () => console.log("Client disconnected"));
-    ws.on("error", () => console.log("Some Error occurred"));
+    ws.on("close", () => handleError());
+    ws.on("error", () => handleDisconnect());
 });
 
 function handleRequest(ws, message) {
     const parsedMessage = JSON.parse(message);
 
     if (parsedMessage.event === 'sendRequest') {
-        const responseMessage = randomWords();
-        const responseTime = (Math.floor(Math.random() * 10) + 1) * 1;//000;
-        const id = generateId(); 
-        const response = {
+        const randomResponseMessage = {
             event: 'sendResponse',
-            payload: {
-                id: id,
-                response: responseMessage
-            }
+            payload: { response: randomWords() }
         }
-        saveMessage(id, parsedMessage, response);
-        setTimeout(() => ws.send(JSON.stringify(response)), responseTime);
+
+        wss.sendResponse(ws, parsedMessage, randomResponseMessage)
     }
 
     if (parsedMessage.event === 'GetById') {
-        const { request: req, response: resp }  = getMessage(parsedMessage.payload.id);
+        const { request: req, response: resp }  = wss.getMappedMessages(parsedMessage.payload.id);
         const response = {
             event: 'sendMap',
             payload: {request: req.payload.request, response: resp.payload.response}
         }
         ws.send(JSON.stringify(response));
     }
+
 };
 
-function saveMessage(id, request, response) {
-    messageDatabase.set(id, {request: request, response: response});
-    return messageDatabase;
+function handleError() {
+    console.log("Some Error occurred");
 };
 
-function getMessage(id) {
-    return messageDatabase.get(id);
-};
-
-function generateId() {
-    return messageId++;
+function handleDisconnect() {
+    console.log("Client disconnected.");
 };
 
 console.log("The WebSocket server is running on port 3000");
