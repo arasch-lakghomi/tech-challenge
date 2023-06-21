@@ -1,26 +1,31 @@
-h1  { 
-    text-align: center;
-} 
-
-h1, .explanation  { 
-    margin-bottom: 40px;
-} 
-
-
-
-.frame { 
-    display: flex;
-    justify-content: space-between;
-    align-items: start;
+.app { 
     padding: 0 50px;
-    gap: 20px;
 
-    .column-title { 
-        font-size: 20px;
-        font-weight: bold;
+    h1  { 
+        text-align: center;
     } 
-
-    p { 
-        margin: 0;
+    
+    h1, .explanation  { 
+        margin-bottom: 40px;
+    } 
+    
+    
+    
+    .frame { 
+        display: flex;
+        justify-content: space-between;
+        align-items: start;
+        gap: 20px;
+    
+        .column-title { 
+            font-size: 20px;
+            font-weight: bold;
+        } 
+    
+        p { 
+            margin: 0;
+        } 
     } 
 } 
+
+

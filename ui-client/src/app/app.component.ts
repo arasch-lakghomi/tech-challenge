@@ -34,7 +34,7 @@ export class AppComponent implements OnDestroy {
       this.responses.push({id: msg.payload.id!, message: msg.payload.response!});
     }
     if (msg.event === 'sendMap') {
-      this.mappings.push(`Map: ${msg.payload.request!}  => ${msg.payload.response!}`);
+      this.mappings.push(`${msg.payload.request!}  =>  ${msg.payload.response!}`);
     }
   }
 
