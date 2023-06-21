@@ -6,40 +6,35 @@ const wss = new CustomWebSocketServer({ port: 3000 });
 wss.on("connection", ws => {
     console.log('Client connected');
     
-    ws.on("message", message => handleRequest(ws, message));
-    ws.on("close", () => handleError());
-    ws.on("error", () => handleDisconnect());
+    ws.on("message", message => _handleRequest(ws, message));
+    ws.on("close", () => console.log("Some Error occurred."));
+    ws.on("error", () => console.log("Client disconnected."));
 });
 
-function handleRequest(ws, message) {
+function _handleRequest(ws, message) {
     const parsedMessage = JSON.parse(message);
 
-    if (parsedMessage.event === 'sendRequest') {
-        const randomResponseMessage = {
-            event: 'sendResponse',
-            payload: { response: randomWords() }
-        }
+    switch (parsedMessage.event) {
+        case 'sendRequest':
+            const randomResponseMessage = {
+                event: 'sendResponse',
+                payload: { response: randomWords() }
+            }
+            wss.sendResponse(ws, parsedMessage, randomResponseMessage);
+            break;
 
-        wss.sendResponse(ws, parsedMessage, randomResponseMessage)
-    }
+        case 'GetById':
+            const { request: req, response: resp }  = wss.getMappedMessages(parsedMessage.payload.id);
+            const response = {
+                event: 'sendMap',
+                payload: {request: req.payload.request, response: resp.payload.response}
+            }
+            ws.send(JSON.stringify(response));
+            break;
 
-    if (parsedMessage.event === 'GetById') {
-        const { request: req, response: resp }  = wss.getMappedMessages(parsedMessage.payload.id);
-        const response = {
-            event: 'sendMap',
-            payload: {request: req.payload.request, response: resp.payload.response}
-        }
-        ws.send(JSON.stringify(response));
-    }
-
-};
-
-function handleError() {
-    console.log("Some Error occurred");
-};
-
-function handleDisconnect() {
-    console.log("Client disconnected.");
+        default:
+            console.log('Client request event unknown.');
+      }
 };
 
 console.log("The WebSocket server is running on port 3000");

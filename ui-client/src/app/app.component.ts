@@ -26,7 +26,7 @@ export class AppComponent implements OnDestroy {
   private listenToServerEvents() {
     this.ws.messages$
       .pipe(takeUntil(this.destroy$))
-      .subscribe(msg => this.handleServerMessage(msg));
+      .subscribe((msg: Message) => this.handleServerMessage(msg));
   }
   
   private handleServerMessage(msg: Message) {
@@ -58,7 +58,7 @@ export class AppComponent implements OnDestroy {
     });
   }
 
-  ngOnDestroy(): void {
+  ngOnDestroy() {
     this.destroy$.complete();
     this.ws.close();
   }
