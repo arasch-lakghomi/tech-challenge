@@ -27,7 +27,7 @@ Make sure you have the following prerequisites installed:
 ### Start the Application
 From the terminal, cd into the project root folder and run the following command:
 ```console
-docker-compose up
+docker compose up
 ```
 
-The UI will then be accessible through a web browser on http://localhost.
+After succussful build and deployment, the UI will be accessible through a web browser on http://localhost.
